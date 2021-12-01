@@ -1,0 +1,7 @@
+# IDE Files
+.vscode/
+**/tags*
+
+# Build Files
+**/*.o
+main
