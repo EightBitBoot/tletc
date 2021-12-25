@@ -4,4 +4,8 @@
 
 # Build Files
 **/*.o
-main
+**/*.d
+**/main
+
+# Misc
+**/*.txt
