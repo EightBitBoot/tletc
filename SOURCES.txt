@@ -1,0 +1,8 @@
+stb_image.h  - https://github.com/nothings/stb
+
+backdrop.jpg - https://www.poliigon.com/texture/wood-fine-dark-004
+table.jpg    - https://www.poliigon.com/texture/wood-flooring-061
+box.jpg      - https://www.photos-public-domain.com/2016/11/09/grass-lawn-texture/
+mug.jpg      - https://www.goodfon.com/wallpaper/tkan-uzor-stil-tsvety-kitai-tekstura.html
+napkin.jpg   - https://www.tilingtextures.com/burlap-fabric-texture/
+

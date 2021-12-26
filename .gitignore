@@ -2,10 +2,10 @@
 .vscode/
 **/tags*
 
-# Build Files
-**/*.o
-**/*.d
-**/main
+# Build System
+Makefile
+*.make
 
-# Misc
-**/*.txt
+# Build Outputs
+bin/
+build/

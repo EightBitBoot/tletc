@@ -3,6 +3,7 @@
 #include <error.h>
 
 #include <vector>
+#include <string>
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -41,6 +42,7 @@ Camera defaultCamera = {
 Camera camera = defaultCamera;
 vec4 lightPos(1.4f, 3.3f, -2.299f, 1.0f);
 
+std::string resourcesPath;
 bool reloadShaders = true;
 
 void glfwErrorCallback(int errorCode, char *errorMessage) {
@@ -200,34 +202,34 @@ GLFWwindow *init() {
 void makeScene(std::vector<Entity> &phongEntities, std::vector<Entity> &textureEntities, std::vector<Entity> &mugMug) {
     MaterialRegistry *matRegistry = MaterialRegistry::getRegistry();
 
-    TexMaterial *tableMaterial = new TexMaterial("table.jpg", 3, 0.3, 0.7, 0.5, 10.0f);
+    TexMaterial *tableMaterial = new TexMaterial((resourcesPath + "textures/table.jpg").c_str(), 3, 0.3, 0.7, 0.5, 10.0f);
     matRegistry->registerMaterial(tableMaterial);
 
-    TexMaterial *boxMaterial = new TexMaterial("box.jpg", 3, 0.3f, 0.7f, 0.5f, 10.0f);
+    TexMaterial *boxMaterial = new TexMaterial((resourcesPath + "textures/box.jpg").c_str(), 3, 0.3f, 0.7f, 0.5f, 10.0f);
     matRegistry->registerMaterial(boxMaterial);
 
-    TexMaterial *backdropMaterial = new TexMaterial("backdrop.jpg", 3, 0.3, 0.7, 0.5, 10.0f);
+    TexMaterial *backdropMaterial = new TexMaterial((resourcesPath + "textures/backdrop.jpg").c_str(), 3, 0.3, 0.7, 0.5, 10.0f);
     matRegistry->registerMaterial(backdropMaterial);
 
-    TexMaterial *mugMaterial = new TexMaterial("mug.jpg", 3, 0.3f, 0.7f, 0.5f, 10.0f);
+    TexMaterial *mugMaterial = new TexMaterial((resourcesPath + "textures/mug.jpg").c_str(), 3, 0.3f, 0.7f, 0.5f, 10.0f);
     matRegistry->registerMaterial(mugMaterial);
 
-    TexMaterial *mugHandleMaterial = new TexMaterial("handle.png", 4, 0.3f, 0.7f, 0.5f, 10.0f);
+    TexMaterial *mugHandleMaterial = new TexMaterial((resourcesPath + "textures/handle.png").c_str(), 4, 0.3f, 0.7f, 0.5f, 10.0f);
     matRegistry->registerMaterial(mugHandleMaterial);
 
-    TexMaterial *napkinMaterial = new TexMaterial("napkin.jpg", 3, 0.3f, 0.7f, 0.5f, 10.0f);
+    TexMaterial *napkinMaterial = new TexMaterial((resourcesPath + "textures/napkin.jpg").c_str(), 3, 0.3f, 0.7f, 0.5f, 10.0f);
     matRegistry->registerMaterial(napkinMaterial);
     
-    TexMaterial *forkMaterial = new TexMaterial("fork.png", 4, 0.3f, 0.7f, 0.5f, 10.0f);
+    TexMaterial *forkMaterial = new TexMaterial((resourcesPath + "textures/fork.png").c_str(), 4, 0.3f, 0.7f, 0.5f, 10.0f);
     matRegistry->registerMaterial(forkMaterial);
 
-    TexMaterial *teaMaterial = new TexMaterial("tea.png", 4, 0.3f, 0.7f, 0.5f, 10.0f);
+    TexMaterial *teaMaterial = new TexMaterial((resourcesPath + "textures/tea.png").c_str(), 4, 0.3f, 0.7f, 0.5f, 10.0f);
     matRegistry->registerMaterial(teaMaterial);
 
-    TexMaterial *plateMaterial = new TexMaterial("plate.png", 4, 0.3f, 0.7f, 0.5f, 10.0f);
+    TexMaterial *plateMaterial = new TexMaterial((resourcesPath + "textures/plate.png").c_str(), 4, 0.3f, 0.7f, 0.5f, 10.0f);
     matRegistry->registerMaterial(plateMaterial);
 
-    TexMaterial *lemonSquareMaterial = new TexMaterial("lemonsquare.jpg", 3, 0.3f, 0.7f, 0.5f, 10.0f);
+    TexMaterial *lemonSquareMaterial = new TexMaterial((resourcesPath + "textures/lemonsquare.jpg").c_str(), 3, 0.3f, 0.7f, 0.5f, 10.0f);
     matRegistry->registerMaterial(lemonSquareMaterial);
 
     PhongMaterial *teapotMaterial = new PhongMaterial({0.396078f, 0.839216f, 0.631373f, 1.0f}, 0.3f,
@@ -348,11 +350,20 @@ void makeScene(std::vector<Entity> &phongEntities, std::vector<Entity> &textureE
     tea.rotateX(-90.0f);
     tea.setScale({0.52f, 0.52f, 1.0f});
     textureEntities.push_back(tea);
-
-    
 }
 
 int main(int argc, char **argv) {
+    if(argc < 2) {
+        printf("No resources path passed.  Using working dir as resource path.\n");
+        resourcesPath = "";
+    }
+    else {
+        resourcesPath = argv[1];
+        if(resourcesPath[resourcesPath.length() - 1] != '/'){
+            resourcesPath += "/";
+        }
+    }
+
     GLFWwindow *window = init();
 
     std::vector<Entity> phongEntities;
@@ -364,9 +375,9 @@ int main(int argc, char **argv) {
     lightCube.setScale({0.25f, 0.25f, 0.25f});
     phongEntities.push_back(lightCube);
 
-    PhongShader phongShader("phongShader", "common.vert", "phong.frag");
-    TexShader texShader("texShader", "common.vert", "texture.frag");
-    TexShader mugShader("mugShader", "common.vert", "mug.frag");
+    PhongShader phongShader("phongShader", "src/common.vert", "src/phong.frag");
+    TexShader texShader("texShader", "src/common.vert", "src/texture.frag");
+    TexShader mugShader("mugShader", "src/common.vert", "src/mug.frag");
 
     ArrayBuffer phongBuffer;
     phongBuffer.addEntities(phongEntities);
