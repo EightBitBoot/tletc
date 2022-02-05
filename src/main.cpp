@@ -4,6 +4,9 @@
 
 #include <vector>
 #include <string>
+#include <filesystem>
+
+#include <unistd.h>
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -25,6 +28,7 @@
 #include "basket.h"
 #include "icosphere.h"
 #include "cylinder.h"
+#include "vfs.h"
 
 using namespace glm;
 
@@ -201,36 +205,41 @@ GLFWwindow *init() {
 
 void makeScene(std::vector<Entity> &phongEntities, std::vector<Entity> &textureEntities, std::vector<Entity> &mugMug) {
     MaterialRegistry *matRegistry = MaterialRegistry::getRegistry();
+    tletc::VFS *vfs = tletc::VFS::getVFS();
 
-    TexMaterial *tableMaterial = new TexMaterial((resourcesPath + "textures/table.jpg").c_str(), 3, 0.3, 0.7, 0.5, 10.0f);
+    printf("Loading textures\n");
+    
+    TexMaterial *tableMaterial = new TexMaterial(vfs->resolvePath("resources/textures/table.jpg"), 3, 0.3, 0.7, 0.5, 10.0f);
     matRegistry->registerMaterial(tableMaterial);
 
-    TexMaterial *boxMaterial = new TexMaterial((resourcesPath + "textures/box.jpg").c_str(), 3, 0.3f, 0.7f, 0.5f, 10.0f);
+    TexMaterial *boxMaterial = new TexMaterial(vfs->resolvePath("resources/textures/box.jpg"), 3, 0.3f, 0.7f, 0.5f, 10.0f);
     matRegistry->registerMaterial(boxMaterial);
 
-    TexMaterial *backdropMaterial = new TexMaterial((resourcesPath + "textures/backdrop.jpg").c_str(), 3, 0.3, 0.7, 0.5, 10.0f);
+    TexMaterial *backdropMaterial = new TexMaterial(vfs->resolvePath("resources/textures/backdrop.jpg"), 3, 0.3, 0.7, 0.5, 10.0f);
     matRegistry->registerMaterial(backdropMaterial);
 
-    TexMaterial *mugMaterial = new TexMaterial((resourcesPath + "textures/mug.jpg").c_str(), 3, 0.3f, 0.7f, 0.5f, 10.0f);
+    TexMaterial *mugMaterial = new TexMaterial(vfs->resolvePath("resources/textures/mug.jpg"), 3, 0.3f, 0.7f, 0.5f, 10.0f);
     matRegistry->registerMaterial(mugMaterial);
 
-    TexMaterial *mugHandleMaterial = new TexMaterial((resourcesPath + "textures/handle.png").c_str(), 4, 0.3f, 0.7f, 0.5f, 10.0f);
+    TexMaterial *mugHandleMaterial = new TexMaterial(vfs->resolvePath("resources/textures/handle.png"), 4, 0.3f, 0.7f, 0.5f, 10.0f);
     matRegistry->registerMaterial(mugHandleMaterial);
 
-    TexMaterial *napkinMaterial = new TexMaterial((resourcesPath + "textures/napkin.jpg").c_str(), 3, 0.3f, 0.7f, 0.5f, 10.0f);
+    TexMaterial *napkinMaterial = new TexMaterial(vfs->resolvePath("resources/textures/napkin.jpg"), 3, 0.3f, 0.7f, 0.5f, 10.0f);
     matRegistry->registerMaterial(napkinMaterial);
     
-    TexMaterial *forkMaterial = new TexMaterial((resourcesPath + "textures/fork.png").c_str(), 4, 0.3f, 0.7f, 0.5f, 10.0f);
+    TexMaterial *forkMaterial = new TexMaterial(vfs->resolvePath("resources/textures/fork.png"), 4, 0.3f, 0.7f, 0.5f, 10.0f);
     matRegistry->registerMaterial(forkMaterial);
 
-    TexMaterial *teaMaterial = new TexMaterial((resourcesPath + "textures/tea.png").c_str(), 4, 0.3f, 0.7f, 0.5f, 10.0f);
+    TexMaterial *teaMaterial = new TexMaterial(vfs->resolvePath("resources/textures/tea.png"), 4, 0.3f, 0.7f, 0.5f, 10.0f);
     matRegistry->registerMaterial(teaMaterial);
 
-    TexMaterial *plateMaterial = new TexMaterial((resourcesPath + "textures/plate.png").c_str(), 4, 0.3f, 0.7f, 0.5f, 10.0f);
+    TexMaterial *plateMaterial = new TexMaterial(vfs->resolvePath("resources/textures/plate.png"), 4, 0.3f, 0.7f, 0.5f, 10.0f);
     matRegistry->registerMaterial(plateMaterial);
 
-    TexMaterial *lemonSquareMaterial = new TexMaterial((resourcesPath + "textures/lemonsquare.jpg").c_str(), 3, 0.3f, 0.7f, 0.5f, 10.0f);
+    TexMaterial *lemonSquareMaterial = new TexMaterial(vfs->resolvePath("resources/textures/lemonsquare.jpg"), 3, 0.3f, 0.7f, 0.5f, 10.0f);
     matRegistry->registerMaterial(lemonSquareMaterial);
+
+    printf("Done\n");
 
     PhongMaterial *teapotMaterial = new PhongMaterial({0.396078f, 0.839216f, 0.631373f, 1.0f}, 0.3f,
                                                       {0.396078f, 0.839216f, 0.631373f, 1.0f}, 0.7f,
@@ -353,16 +362,16 @@ void makeScene(std::vector<Entity> &phongEntities, std::vector<Entity> &textureE
 }
 
 int main(int argc, char **argv) {
-    if(argc < 2) {
-        printf("No resources path passed.  Using working dir as resource path.\n");
-        resourcesPath = "";
-    }
-    else {
-        resourcesPath = argv[1];
-        if(resourcesPath[resourcesPath.length() - 1] != '/'){
-            resourcesPath += "/";
-        }
-    }
+    // Get the executable path
+    char buffer[4096];
+    readlink("/proc/self/exe", buffer, 4096);
+    std::filesystem::path executablePath(buffer);
+    executablePath.remove_filename();
+
+    tletc::VFS *vfs = tletc::VFS::getVFS();
+    vfs->mountPath(std::string(executablePath) + "../../resources", "resources");
+    vfs->mountPath(std::string(executablePath) + "../../src",       "shaders");
+    vfs->dumpTree();
 
     GLFWwindow *window = init();
 
@@ -375,9 +384,9 @@ int main(int argc, char **argv) {
     lightCube.setScale({0.25f, 0.25f, 0.25f});
     phongEntities.push_back(lightCube);
 
-    PhongShader phongShader("phongShader", "src/common.vert", "src/phong.frag");
-    TexShader texShader("texShader", "src/common.vert", "src/texture.frag");
-    TexShader mugShader("mugShader", "src/common.vert", "src/mug.frag");
+    PhongShader phongShader("phongShader", vfs->resolvePath("shaders/common.vert"), vfs->resolvePath("shaders/phong.frag"));
+    TexShader texShader("texShader", vfs->resolvePath("shaders/common.vert"), vfs->resolvePath("shaders/texture.frag"));
+    TexShader mugShader("mugShader", vfs->resolvePath("shaders/common.vert"), vfs->resolvePath("shaders/mug.frag"));
 
     ArrayBuffer phongBuffer;
     phongBuffer.addEntities(phongEntities);

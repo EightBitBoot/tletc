@@ -1,6 +1,8 @@
 #ifndef __MATERIAL_H__
 #define __MATERIAL_H__
 
+#include <string>
+
 #include <GL/glew.h>
 #include <glm/vec4.hpp>
 
@@ -50,7 +52,7 @@ private:
 
 class TexMaterial : public Material {
 public:
-    TexMaterial(const char *filename, int channels, float ka, float kd, float ks, float se);
+    TexMaterial(const std::string &filename, int channels, float ka, float kd, float ks, float se);
     ~TexMaterial();
 
     GLuint getTextureObjectId() const;

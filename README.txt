@@ -11,12 +11,15 @@ Building:
     2) Build using the generated build files (ex. linux: make)
 
 Running:
-    - Run "bin/<premake_config>/tletc resources" from the root directory of the project
+    - Run the executable generated in bin/<premake_config>/tletc
 
-    NOTE: the shader paths are hardcoded to the src/ directory so the current directory
-          of the executable must be the root.  Additionally resources is passed as an
-          argument to select the location of the resources directory.  I know this is
-          hacky and will be fixed with a virtual file system for loading from disk.
+    NOTE: The vfs handles resource file path resolution, however the usage in main.c
+          currently mounts paths relative to the location of the executable.  This
+          means that the executable can be run from any working directory, but the
+          resource directories can't be moved relative to the executable.
+          Additionally, the system used to find the executable directory uses procfs
+          and the linux layout of that fs.  This shouldn't be an issue in 99% of use
+          cases, but is important to note for the very few cases where it will fail.
 
 Controls:
     - Scroll wheel adjusts fov

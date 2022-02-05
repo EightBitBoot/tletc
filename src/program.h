@@ -2,6 +2,7 @@
 #define __PROGRAM_H__
 
 #include <vector>
+#include <string>
 
 #include <GL/glew.h>
 #include <glm/mat4x4.hpp>
@@ -11,7 +12,7 @@
 
 class ShaderProgram {
 public:
-    ShaderProgram(const char *friendlyName, const char *vertexPath, const char *fragmentPath);
+    ShaderProgram(const std::string &friendlyName, const std::string &vertexPath, const std::string &fragmentPath);
     ~ShaderProgram();
 
     bool load();
@@ -34,9 +35,9 @@ private:
 
     GLuint m_programId;
 
-    const char *m_friendlyName;
-    const char *m_vertexPath;
-    const char *m_fragmentPath;
+    std::string m_friendlyName;
+    std::string m_vertexPath;
+    std::string m_fragmentPath;
 
     bool m_isLoaded;
     bool m_isInUse;
@@ -44,7 +45,7 @@ private:
 
 class PhongShader : public ShaderProgram {
 public:
-    PhongShader(const char *friendlyName, const char *vertexPath, const char *fragmentPath);
+    PhongShader(const std::string &friendlyName, const std::string &vertexPath, const std::string &fragmentPath);
     ~PhongShader();
 
 private:
@@ -53,7 +54,7 @@ private:
 
 class TexShader : public ShaderProgram {
 public:
-    TexShader(const char *friendlyName, const char *vertexPath, const char *fragmentPath);
+    TexShader(const std::string &friendlyName, const std::string &vertexPath, const std::string &fragmentPath);
     ~TexShader();
 
 private:

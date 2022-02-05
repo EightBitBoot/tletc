@@ -43,7 +43,7 @@ float PhongMaterial::getSe() { return m_se; }
 
 // --------------- TexMaterial ---------------
 
-TexMaterial::TexMaterial(const char *filename, int channels, float ka, float kd, float ks, float se) :
+TexMaterial::TexMaterial(const std::string &filename, int channels, float ka, float kd, float ks, float se) :
     m_ka(ka),
     m_kd(kd),
     m_ks(ks),
@@ -57,9 +57,9 @@ TexMaterial::TexMaterial(const char *filename, int channels, float ka, float kd,
     GL_CALL(glBindTexture(GL_TEXTURE_2D, m_textureObjectId));
 
     stbi_set_flip_vertically_on_load(true);
-    imageBuffer = stbi_load(filename, &imageWidth, &imageHeight, NULL, channels);
+    imageBuffer = stbi_load(filename.c_str(), &imageWidth, &imageHeight, NULL, channels);
     if(imageBuffer == NULL) {
-        fprintf(stderr, "Error loading image \"%s\": %s\n", filename, stbi_failure_reason());
+        fprintf(stderr, "Error loading image \"%s\": %s\n", filename.c_str(), stbi_failure_reason());
         GL_CALL(glBindTexture(GL_TEXTURE_2D, 0));
         GL_CALL(glDeleteTextures(1, &m_textureObjectId));
         m_textureObjectId = 0;

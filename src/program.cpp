@@ -12,14 +12,14 @@
 
 // --------------- Static Functions ---------------
 
-static GLuint setupShader(const char *filepath, GLenum shaderType, const char *friendlyName) {
+static GLuint setupShader(std::string &filepath, GLenum shaderType, std::string &friendlyName) {
     GLuint shaderId = 0;
 
     FILE *shaderFile = nullptr;
     long shaderFileLen = 0;
     char *shaderBuffer = nullptr;
 
-    shaderFile = fopen(filepath, "rt");
+    shaderFile = fopen(filepath.c_str(), "rt");
     if(!shaderFile) {
         perror("open shaderFile");
         return 0;
@@ -51,7 +51,7 @@ static GLuint setupShader(const char *filepath, GLenum shaderType, const char *f
         GL_CALL(glGetShaderInfoLog(shaderId, logLen, NULL, log));
 
         const char *shaderTypeName = (shaderType == GL_VERTEX_SHADER ? "vertex" : "fragment");
-        fprintf(stderr, "Error compiling %s shader in program \"%s\":\n%s\n", shaderTypeName, friendlyName, log);
+        fprintf(stderr, "Error compiling %s shader in program \"%s\":\n%s\n", shaderTypeName, friendlyName.c_str(), log);
 
         free(log);
         GL_CALL(glDeleteShader(shaderId));
@@ -61,7 +61,7 @@ static GLuint setupShader(const char *filepath, GLenum shaderType, const char *f
     return shaderId;
 }
 
-static GLuint setupProgram(const char *vertFile, const char *fragFile, const char *friendlyName) {
+static GLuint setupProgram(std::string &vertFile, std::string &fragFile, std::string &friendlyName) {
     GLuint vertShader = setupShader(vertFile, GL_VERTEX_SHADER, friendlyName); 
     if(!vertShader) {
         return 0;
@@ -93,7 +93,7 @@ static GLuint setupProgram(const char *vertFile, const char *fragFile, const cha
         GLchar *log = (GLchar *) malloc(logLen);
         GL_CALL(glGetProgramInfoLog(program, logLen, NULL, log));
 
-        fprintf(stderr, "Error linking program\"%s\":\n%s\n", friendlyName, log);
+        fprintf(stderr, "Error linking program\"%s\":\n%s\n", friendlyName.c_str(), log);
 
         free(log);
         glDeleteProgram(program);
@@ -105,7 +105,7 @@ static GLuint setupProgram(const char *vertFile, const char *fragFile, const cha
 
 // --------------- ShaderProgram ---------------
 
-ShaderProgram::ShaderProgram(const char *friendlyName, const char *vertexPath, const char *fragmentPath) :
+ShaderProgram::ShaderProgram(const std::string &friendlyName, const std::string &vertexPath, const std::string &fragmentPath) :
     m_programId(0),
     m_friendlyName(friendlyName),
     m_vertexPath(vertexPath),
@@ -231,7 +231,7 @@ bool ShaderProgram::isInUse() { return m_isInUse; }
 
 // --------------- PhongShader ---------------
 
-PhongShader::PhongShader(const char *friendlyName, const char *vertexPath, const char *fragmentPath) :
+PhongShader::PhongShader(const std::string &friendlyName, const std::string &vertexPath, const std::string &fragmentPath) :
     ShaderProgram(friendlyName, vertexPath, fragmentPath)
 {}
 
@@ -259,7 +259,7 @@ bool PhongShader::setEntityUniformsSpecalized(Entity &entity) {
 
 // --------------- TexShader ---------------
 
-TexShader::TexShader(const char *friendlyName, const char *vertexPath, const char *fragmentPath) :
+TexShader::TexShader(const std::string &friendlyName, const std::string &vertexPath, const std::string &fragmentPath) :
     ShaderProgram(friendlyName, vertexPath, fragmentPath)
 {}
 
