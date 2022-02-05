@@ -3,7 +3,7 @@
 
 #include <unordered_map>
 
-#include "material.h"
+#include <tletc/renderer/material.h>
 
 class MaterialRegistry {
 public:

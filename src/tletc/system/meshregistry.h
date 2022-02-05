@@ -3,8 +3,7 @@
 
 #include <unordered_map>
 
-#include "mesh.h"
-#include "material.h"
+#include <tletc/renderer/mesh.h>
 
 class MeshRegistry {
 public:

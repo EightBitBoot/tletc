@@ -5,7 +5,7 @@
 #include <unordered_map>
 #include <string>
 
-#include "internal_core.h"
+#include "../internal_core.h"
 
 namespace tletc {
     /// A single node in the vfs tree

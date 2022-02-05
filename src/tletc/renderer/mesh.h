@@ -10,7 +10,7 @@
 #include <glm/vec3.hpp>
 #include <glm/mat4x4.hpp>
 
-#include "types.h" 
+#include <tletc/types.h>
 
 class Mesh {
 public:

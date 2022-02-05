@@ -6,10 +6,10 @@
 #include <glm/vec2.hpp>
 #include <GL/glew.h>
 
+#include <tletc/types.h>
+#include <tletc/renderer/mesh.h>
+#include <tletc/system/meshregistry.h>
 #include "entity.h"
-#include "mesh.h"
-#include "meshregistry.h"
-#include "types.h"
 
 static const Vertex cylinderVertices[] = {
     {{ 0.500000f, -0.500000f,  0.000000f, 1.0f}, { 0.500000f,  0.000000f,  0.000000f}},

@@ -5,8 +5,8 @@
 
 #include <GL/glew.h>
 
-#include "types.h"
-#include "entity.h"
+#include <tletc/types.h>
+#include <tletc/entity/entity.h>
 
 #define BUFF_MAX_ENTITIES 64
 

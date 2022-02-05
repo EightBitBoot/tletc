@@ -9,6 +9,8 @@ project "tletc"
 
     files {"src/**.h", "src/**.cpp"}
 
+    includedirs {"src/"}
+
     links {"m", "GL", "glfw", "GLEW"}
 
     filter "configurations:debug"

@@ -3,9 +3,9 @@
 
 #include <cstring>
 
-#include "error.h"
-#include "meshregistry.h"
-#include "materialregistry.h"
+#include <tletc/system/meshregistry.h>
+#include <tletc/system/materialregistry.h>
+#include "glerror.h"
 
 ArrayBuffer::ArrayBuffer() :
     m_isFinalized(false),

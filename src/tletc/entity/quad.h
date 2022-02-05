@@ -6,10 +6,10 @@
 #include <GL/glew.h>
 #include <glm/vec2.hpp>
 
-#include "types.h"
+#include <tletc/types.h>
+#include <tletc/renderer/mesh.h>
+#include <tletc/system/meshregistry.h>
 #include "entity.h"
-#include "mesh.h"
-#include "meshregistry.h"
 
 static const Vertex quadVertices[] = {
     {{-0.5f,  0.5f, 0.0f, 1.0f}, {0.0f, 0.0f, 1.0f}},

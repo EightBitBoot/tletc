@@ -4,8 +4,8 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
-#include "error.h"
-#include "types.h"
+#include <tletc/types.h>
+#include "glerror.h"
 
 // --------------- Material ---------------
 

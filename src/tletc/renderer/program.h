@@ -7,7 +7,7 @@
 #include <GL/glew.h>
 #include <glm/mat4x4.hpp>
 
-#include "entity.h"
+#include <tletc/entity/entity.h>
 #include "material.h"
 
 class ShaderProgram {

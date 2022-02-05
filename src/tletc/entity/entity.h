@@ -7,7 +7,8 @@
 #include <glm/vec3.hpp>
 #include <glm/vec2.hpp>
 
-#include "types.h"
+#include <tletc/types.h>
+#include <tletc/system/meshregistry.h>
 
 class Entity {
 public:

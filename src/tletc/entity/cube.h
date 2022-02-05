@@ -5,9 +5,10 @@
 
 #include <GL/glew.h>
 
+#include <tletc/types.h>
+#include <tletc/renderer/mesh.h>
+#include <tletc/system/meshregistry.h>
 #include "entity.h"
-#include "mesh.h"
-#include "meshregistry.h"
 
 static const Vertex cubeVertices[] = {
     // Front

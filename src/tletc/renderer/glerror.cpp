@@ -1,5 +1,5 @@
 
-#include "error.h"
+#include "glerror.h"
 
 const char *getErrorCodeName(GLenum errorCode) {
     switch(errorCode) {

@@ -16,19 +16,21 @@
 #include <glm/gtx/string_cast.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "error.h"
-#include "program.h"
-#include "buffer.h"
-#include "cube.h"
-#include "teapot.h"
-#include "material.h"
-#include "materialregistry.h"
-#include "quad.h"
-#include "pie.h"
-#include "basket.h"
-#include "icosphere.h"
-#include "cylinder.h"
-#include "vfs.h"
+#include "system/vfs.h"
+#include "system/materialregistry.h"
+
+#include "entity/cube.h"
+#include "entity/quad.h"
+#include "entity/pie.h"
+#include "entity/basket.h"
+#include "entity/icosphere.h"
+#include "entity/cylinder.h"
+#include "entity/teapot.h"
+
+#include "renderer/glerror.h"
+#include "renderer/program.h"
+#include "renderer/buffer.h"
+#include "renderer/material.h"
 
 using namespace glm;
 
@@ -369,8 +371,8 @@ int main(int argc, char **argv) {
     executablePath.remove_filename();
 
     tletc::VFS *vfs = tletc::VFS::getVFS();
-    vfs->mountPath(std::string(executablePath) + "../../resources", "resources");
-    vfs->mountPath(std::string(executablePath) + "../../src",       "shaders");
+    vfs->mountPath(std::string(executablePath) + "../../resources",        "resources");
+    vfs->mountPath(std::string(executablePath) + "../../src/tletc/shader", "shaders");
     vfs->dumpTree();
 
     GLFWwindow *window = init();

@@ -6,7 +6,7 @@
 #include <GL/glew.h>
 #include <glm/vec4.hpp>
 
-#include "types.h"
+#include <tletc/types.h>
 
 class Material {
 public:

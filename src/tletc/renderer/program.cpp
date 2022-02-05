@@ -6,9 +6,9 @@
 
 #include <string>
 
-#include "error.h"
+#include "glerror.h"
 #include "material.h"
-#include "materialregistry.h"
+#include <tletc/system/materialregistry.h>
 
 // --------------- Static Functions ---------------
 

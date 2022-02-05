@@ -6,9 +6,10 @@
 #include <GL/glew.h>
 #include <glm/vec3.hpp>
 
-#include "types.h"
+#include <tletc/types.h>
+#include <tletc/renderer/mesh.h>
+#include <tletc/system/meshregistry.h>
 #include "entity.h"
-#include "meshregistry.h"
 
 static const Vertex teapotVertices[] = {
     {{-0.071784,  0.360000,  0.213696, 1.000000}, {-0.262900,  0.524100,  0.810000}},

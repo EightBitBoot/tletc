@@ -3,10 +3,10 @@
 
 #include <GL/glew.h>
 
-#include "types.h"
+#include <tletc/types.h>
+#include <tletc/renderer/mesh.h>
+#include <tletc/system/meshregistry.h>
 #include "entity.h"
-#include "mesh.h"
-#include "meshregistry.h"
 
 static const Vertex basketVertices[] = {
     {{-0.889787f, -0.230558f, -0.155609f,  1.000000f}, {-0.871100f, -0.469600f, -0.143700f}},
