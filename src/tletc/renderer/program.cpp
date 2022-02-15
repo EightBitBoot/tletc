@@ -160,7 +160,7 @@ bool ShaderProgram::setUniform(const char *name, const T& value) {
 
     GLint location = GL_CALL(glGetUniformLocation(m_programId, name));
     if(location == -1) {
-        fprintf(stderr, "Couldn't locate uniform \"%s\" in program \"%s\"!\n", name, m_friendlyName);
+        fprintf(stderr, "Couldn't locate uniform \"%s\" in program \"%s\"!\n", name, m_friendlyName.c_str());
         return false;
     }
 

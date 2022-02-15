@@ -1,0 +1,57 @@
+Not in any particular order
+
+* Platform Abstraction Layer
+    - Window Handling
+    - Context Creation
+    - File handling 
+
+* TLETC_ASSERT()
+
+* Documentation Generator System
+
+* Better Documentation (README.md ...)
+
+* Component System
+    - Central Registry
+    - Singleton Handling
+    - Id type
+    - Typing System
+
+* Coheasive renderer class / System
+    - Entity submission
+    - Render entire state with one call
+
+* Layer system
+
+* Event System
+
+* Input Handling System
+
+* General Purpose Tokenizer and Lexer
+  for various purposes
+
+* Editor
+    - Imgui integration
+    - Landing Screen / Project Loader
+    - Project System
+        * Project file format
+
+* Get rid of libraries
+    - GLFW
+    - GLM
+        * Custom math library
+
+* Scene system
+    - Serializer
+
+* Command Line Arguments
+
+* Config System
+
+* VFS Serialization
+
+* Text Rendering
+
+* Distribution System
+    - Asset Packaging
+        - Asset package file format

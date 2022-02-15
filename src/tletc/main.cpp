@@ -18,6 +18,7 @@
 
 #include "system/vfs.h"
 #include "system/materialregistry.h"
+#include "system/log.h"
 
 #include "entity/cube.h"
 #include "entity/quad.h"
@@ -373,7 +374,12 @@ int main(int argc, char **argv) {
     tletc::VFS *vfs = tletc::VFS::getVFS();
     vfs->mountPath(std::string(executablePath) + "../../resources",        "resources");
     vfs->mountPath(std::string(executablePath) + "../../src/tletc/shader", "shaders");
+    // log directory currently requires manual creation
+    vfs->mountPath(std::string(executablePath) + "log", "log");
     vfs->dumpTree();
+
+    tletc::Logger::getLogger()->addOutput(new tletc::TermLoggerOutput());
+    tletc::Logger::getLogger()->addOutput(new tletc::FileLoggerOutput(vfs->resolvePath("log/tletc.log"), false));
 
     GLFWwindow *window = init();
 
