@@ -116,9 +116,13 @@ namespace tletc {
     /// 
     void FileLoggerOutput::output(LogLevel loglevel, const char *message, va_list args) {
         // TODO(Adin): Is there a way to compress this into one call without allocating memory for sprintf
-        fprintf(m_logFile, "[TLETC:%s] ", LOG_LEVEL_NAMES[loglevel]);
-        vfprintf(m_logFile, message, args);
-        fprintf(m_logFile, "\n");
+        if(m_logFile) {
+            // TODO(Adin): This if is hacky, change it when implementing log file validity checks
+            fprintf(m_logFile, "[TLETC:%s] ", LOG_LEVEL_NAMES[loglevel]);
+            vfprintf(m_logFile, message, args);
+            fprintf(m_logFile, "\n");
+            fflush(m_logFile);
+        }
     }
 
     /// Flush messages to the destination file
@@ -157,9 +161,15 @@ namespace tletc {
         va_list args;
         va_start(args, message);
 
+        va_list argsToPass;
+
         for(OutIter iter = m_outputs.begin(); iter != m_outputs.end(); iter++) {
-            (*iter)->output(loglevel, message, args);
+            va_copy(argsToPass, args);
+            (*iter)->output(loglevel, message, argsToPass);
         }
+
+        va_end(argsToPass);
+        va_end(args);
     }
 
     /// Get the current log level

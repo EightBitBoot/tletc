@@ -5,7 +5,8 @@
 #include <unordered_map>
 #include <string>
 
-#include "../internal_core.h"
+#include "tletc/internal_core.h"
+#include "tletc/system/log.h"
 
 namespace tletc {
     /// A single node in the vfs tree
@@ -210,10 +211,10 @@ namespace tletc {
     // Print the contents of a VFSNode
     static void dumpNode(VFSNode *node) {
         if(!node->diskPath.empty()) {
-            printf("%s -> \"%s\"", node->nodeName.c_str(), node->diskPath.c_str());
+            TLETC_INFO("%s -> \"%s\"", node->nodeName.c_str(), node->diskPath.c_str());
         }
         else {
-            printf("%s", node->nodeName.c_str());
+            TLETC_INFO("%s", node->nodeName.c_str());
         }
     }
 
@@ -230,6 +231,7 @@ namespace tletc {
         child_iterator tempIterator;
         std::string prefix;
         std::string indentationAddition;
+        std::string nodeStr;
         for(child_iterator iter = rootNode->children.begin(); iter != rootNode->children.end(); iter++) {
             tempIterator = iter;
             if(++tempIterator == rootNode->children.end()) {
@@ -243,7 +245,11 @@ namespace tletc {
                 indentationAddition = "|   ";
             }
 
-            printf("%s%s", indentation.c_str(), prefix.c_str()); dumpNode(iter->second); printf("\n");
+            nodeStr = iter->second->nodeName;
+            if(iter->second->diskPath != "") {
+                nodeStr += " -> " + iter->second->diskPath;
+            }
+            TLETC_INFO("%s%s%s", indentation.c_str(), prefix.c_str(), nodeStr.c_str());
             dumpTreeRec(iter->second, indentation + indentationAddition);
         }
     }
@@ -252,7 +258,7 @@ namespace tletc {
     ///
     void VFS::dumpTree() {
         // Print the label for the root node
-        printf("/\n");
+        TLETC_INFO("/");
         dumpTreeRec(m_rootNode, "");
     }
 

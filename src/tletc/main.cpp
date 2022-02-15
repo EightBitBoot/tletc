@@ -53,7 +53,7 @@ std::string resourcesPath;
 bool reloadShaders = true;
 
 void glfwErrorCallback(int errorCode, char *errorMessage) {
-    fprintf(stderr, "GLFW Error: %d: %s\n", errorCode, errorMessage);
+    TLETC_ERR("GLFW Error: %d: %s", errorCode, errorMessage);
     exit(1);
 }
 
@@ -107,8 +107,8 @@ void glfwKeyCallback(GLFWwindow *window, int key, int scancode, int action, int 
 
         case GLFW_KEY_P:
             // Print camera data
-            printf("camPos: %s camTheta: %.03f fov: %.03f\n", to_string(camera.pos).c_str(), camera.theta, camera.fov);
-            printf("lightPos: %s\n\n", glm::to_string(lightPos).c_str());
+            TLETC_INFO("camPos: %s camTheta: %.03f fov: %.03f", to_string(camera.pos).c_str(), camera.theta, camera.fov);
+            TLETC_INFO("lightPos: %s", glm::to_string(lightPos).c_str());
             break;
 
         case GLFW_KEY_R:
@@ -166,7 +166,7 @@ GLFWwindow *init() {
     glfwSetErrorCallback((GLFWerrorfun) glfwErrorCallback);
 
     if(glfwInit() != GLFW_TRUE) {
-        fprintf(stderr, "Failed to initalize GLFW!\n");
+        TLETC_CRIT("Failed to initalize GLFW!");
         exit(1);
     }
 
@@ -180,7 +180,7 @@ GLFWwindow *init() {
     glfwMakeContextCurrent(window);
 
     if(glewInit() != GLEW_OK) {
-        fprintf(stderr, "Failed to initalize GLEW!\n");
+        TLETC_CRIT("Failed to initalize GLEW!");
         glfwDestroyWindow(window);
         glfwTerminate();
         exit(1);
@@ -192,7 +192,7 @@ GLFWwindow *init() {
 
     int major = glfwGetWindowAttrib(window, GLFW_CONTEXT_VERSION_MAJOR);
     int minor = glfwGetWindowAttrib(window, GLFW_CONTEXT_VERSION_MINOR);
-    printf("GL Context Version: %d.%d\n", major, minor);
+    TLETC_INFO("GL Context Version: %d.%d", major, minor);
 
     GL_CALL(glEnable(GL_CULL_FACE));
     GL_CALL(glCullFace(GL_BACK));
@@ -210,7 +210,7 @@ void makeScene(std::vector<Entity> &phongEntities, std::vector<Entity> &textureE
     MaterialRegistry *matRegistry = MaterialRegistry::getRegistry();
     tletc::VFS *vfs = tletc::VFS::getVFS();
 
-    printf("Loading textures\n");
+    TLETC_INFO("Loading textures");
     
     TexMaterial *tableMaterial = new TexMaterial(vfs->resolvePath("resources/textures/table.jpg"), 3, 0.3, 0.7, 0.5, 10.0f);
     matRegistry->registerMaterial(tableMaterial);
@@ -242,7 +242,7 @@ void makeScene(std::vector<Entity> &phongEntities, std::vector<Entity> &textureE
     TexMaterial *lemonSquareMaterial = new TexMaterial(vfs->resolvePath("resources/textures/lemonsquare.jpg"), 3, 0.3f, 0.7f, 0.5f, 10.0f);
     matRegistry->registerMaterial(lemonSquareMaterial);
 
-    printf("Done\n");
+    TLETC_INFO("Done");
 
     PhongMaterial *teapotMaterial = new PhongMaterial({0.396078f, 0.839216f, 0.631373f, 1.0f}, 0.3f,
                                                       {0.396078f, 0.839216f, 0.631373f, 1.0f}, 0.7f,
@@ -365,6 +365,9 @@ void makeScene(std::vector<Entity> &phongEntities, std::vector<Entity> &textureE
 }
 
 int main(int argc, char **argv) {
+    // Setup terminal logging first thing
+    tletc::Logger::getLogger()->addOutput(new tletc::TermLoggerOutput());
+
     // Get the executable path
     char buffer[4096];
     readlink("/proc/self/exe", buffer, 4096);
@@ -378,7 +381,6 @@ int main(int argc, char **argv) {
     vfs->mountPath(std::string(executablePath) + "log", "log");
     vfs->dumpTree();
 
-    tletc::Logger::getLogger()->addOutput(new tletc::TermLoggerOutput());
     tletc::Logger::getLogger()->addOutput(new tletc::FileLoggerOutput(vfs->resolvePath("log/tletc.log"), false));
 
     GLFWwindow *window = init();
@@ -419,24 +421,24 @@ int main(int argc, char **argv) {
 
         if(reloadShaders) {
             if(!phongShader.load()) {
-                fprintf(stderr, "Failed to load phongShader\n");
+                TLETC_CRIT("Failed to load phongShader");
                 exit(1); // TODO(Adin): Update this with real cleanup / exit code
             }
 
             if(!texShader.load()) {
-                fprintf(stderr, "Failed to load texShader\n");
+                TLETC_CRIT("Failed to load texShader");
                 exit(1); // TODO(Adin): Update this with real cleanup / exit code
             }
 
             if(!mugShader.load()) {
-                fprintf(stderr, "Failed to load mugShader\n");
+                TLETC_CRIT("Failed to load mugShader");
                 exit(1); // TODO(Adin): Update this with real cleanup / exit code
             }
 
             reloadShaders = false;
         }
 
-        // printf("fov: %.03f camHeight: %.03f camTheta: %.03f\n", fov, camHeight, camTheta);
+        // TLETC_INFO("fov: %.03f camHeight: %.03f camTheta: %.03f", fov, camHeight, camTheta);
 
         // Hacky fix
         phongEntities.back().setCoords(vec3(lightPos));

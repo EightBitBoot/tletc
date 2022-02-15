@@ -8,7 +8,8 @@
 
 #include "glerror.h"
 #include "material.h"
-#include <tletc/system/materialregistry.h>
+#include "tletc/system/materialregistry.h"
+#include "tletc/system/log.h"
 
 // --------------- Static Functions ---------------
 
@@ -51,7 +52,7 @@ static GLuint setupShader(std::string &filepath, GLenum shaderType, std::string 
         GL_CALL(glGetShaderInfoLog(shaderId, logLen, NULL, log));
 
         const char *shaderTypeName = (shaderType == GL_VERTEX_SHADER ? "vertex" : "fragment");
-        fprintf(stderr, "Error compiling %s shader in program \"%s\":\n%s\n", shaderTypeName, friendlyName.c_str(), log);
+        TLETC_ERR("Error compiling %s shader in program \"%s\":\n%s", shaderTypeName, friendlyName.c_str(), log);
 
         free(log);
         GL_CALL(glDeleteShader(shaderId));
@@ -93,7 +94,7 @@ static GLuint setupProgram(std::string &vertFile, std::string &fragFile, std::st
         GLchar *log = (GLchar *) malloc(logLen);
         GL_CALL(glGetProgramInfoLog(program, logLen, NULL, log));
 
-        fprintf(stderr, "Error linking program\"%s\":\n%s\n", friendlyName.c_str(), log);
+        TLETC_ERR("Error linking program\"%s\":\n%s", friendlyName.c_str(), log);
 
         free(log);
         glDeleteProgram(program);
@@ -160,7 +161,7 @@ bool ShaderProgram::setUniform(const char *name, const T& value) {
 
     GLint location = GL_CALL(glGetUniformLocation(m_programId, name));
     if(location == -1) {
-        fprintf(stderr, "Couldn't locate uniform \"%s\" in program \"%s\"!\n", name, m_friendlyName.c_str());
+        TLETC_ERR("Couldn't locate uniform \"%s\" in program \"%s\"!", name, m_friendlyName.c_str());
         return false;
     }
 

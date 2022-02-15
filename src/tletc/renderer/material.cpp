@@ -6,6 +6,7 @@
 
 #include <tletc/types.h>
 #include "glerror.h"
+#include "tletc/system/log.h"
 
 // --------------- Material ---------------
 
@@ -59,7 +60,7 @@ TexMaterial::TexMaterial(const std::string &filename, int channels, float ka, fl
     stbi_set_flip_vertically_on_load(true);
     imageBuffer = stbi_load(filename.c_str(), &imageWidth, &imageHeight, NULL, channels);
     if(imageBuffer == NULL) {
-        fprintf(stderr, "Error loading image \"%s\": %s\n", filename.c_str(), stbi_failure_reason());
+        TLETC_ERR("Error loading image \"%s\": %s", filename.c_str(), stbi_failure_reason());
         GL_CALL(glBindTexture(GL_TEXTURE_2D, 0));
         GL_CALL(glDeleteTextures(1, &m_textureObjectId));
         m_textureObjectId = 0;
